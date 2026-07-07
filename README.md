@@ -11,7 +11,7 @@ reuse standards instead of re-deciding them.
 
 - **Repository:** https://github.com/elitez-engineering/engineering-skill
 - **Plugin name / marketplace name:** `elitez-engineering`
-- **Version:** `0.1.0`
+- **Version:** `0.2.0`
 
 ---
 
@@ -29,6 +29,7 @@ reuse standards instead of re-deciding them.
 - [The `elitez-standards` skill](#the-elitez-standards-skill)
 - [Commands](#commands)
 - [The `elitez-reviewer` agent](#the-elitez-reviewer-agent)
+- [Railway MCP server (bundled)](#railway-mcp-server-bundled)
 - [The approved stack](#the-approved-stack)
 - [Core principles](#core-principles)
 - [Standards at a glance](#standards-at-a-glance)
@@ -145,6 +146,7 @@ elitez-engineering/
 ├─ .claude-plugin/
 │  ├─ plugin.json           # plugin manifest (name, version, description, keywords)
 │  └─ marketplace.json      # marketplace manifest — repo installs as its own marketplace
+├─ .mcp.json                # bundled MCP servers (Railway) — auto-loaded when the plugin is enabled
 ├─ skills/
 │  └─ elitez-standards/
 │     ├─ SKILL.md           # the source-of-truth skill (auto-loads on Elitez code work)
@@ -163,13 +165,14 @@ elitez-engineering/
 └─ README.md
 ```
 
-Four moving parts work together:
+Five moving parts work together:
 
 1. **The skill** is the knowledge base. It auto-loads and steers Claude toward the house style.
 2. **The commands** are explicit entry points for the three most common tasks (scaffold, review,
    build a component).
 3. **The agent** is a dedicated reviewer you can delegate to.
-4. **The manifests** make it installable as a one-line marketplace.
+4. **The bundled MCP server** (Railway) lets Claude manage your Railway infrastructure directly.
+5. **The manifests** make it installable as a one-line marketplace.
 
 ---
 
@@ -271,6 +274,53 @@ with evidence. It **reviews but does not rewrite** the code, groups findings as
   review — it will not approve those itself.
 - **It won't loop forever** — if two passes don't resolve a point, it states its recommendation and
   hands back.
+
+---
+
+## Railway MCP server (bundled)
+
+Railway is the approved hosting platform, so the plugin bundles the **Railway MCP server**. When the
+plugin is enabled, the server starts automatically and its tools appear in Claude's toolkit — letting
+Claude inspect and manage Railway services (projects, deployments, variables, logs) in natural
+language instead of you hand-copying values from the dashboard.
+
+**Config** (shipped as `.mcp.json` at the plugin root, auto-discovered when the plugin is enabled):
+
+```json
+{
+  "mcpServers": {
+    "railway": {
+      "command": "railway",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+The current Railway MCP is served by the **Railway CLI** (`railway mcp`), which translates requests
+into CLI workflows.
+
+**Prerequisites**
+
+1. **Install the Railway CLI** — see https://docs.railway.com/guides/cli, e.g.
+   `bash <(curl -fsSL https://railway.com/install.sh)` (or `brew install railway`, `npm i -g @railway/cli`).
+2. **Authenticate** once: `railway login`.
+3. The MCP server is a local **stdio** server; it uses your authenticated CLI session — no API token
+   is committed anywhere.
+
+**Approval & lifecycle**
+
+- Like any bundled MCP server, Railway goes through the **same per-server approval** as a project
+  `.mcp.json` — Claude Code prompts you to trust it the first time the plugin is enabled.
+- After enabling (or after a plugin update), run `/reload-plugins` or restart Claude Code so the MCP
+  server picks up the current version.
+- Prefer the hosted option? Railway also offers a remote HTTP MCP at `mcp.railway.com` (set up via
+  `railway setup agent --remote`); swap the local config for that if you don't want the CLI installed.
+- If `railway` isn't on your PATH, the server won't start — install/authenticate the CLI (above),
+  then `/reload-plugins`.
+
+> Security: Railway management actions (deploys, variable changes) can affect production. Treat the
+> MCP as authorized-use only, and route infra changes through the same review discipline as code.
 
 ---
 

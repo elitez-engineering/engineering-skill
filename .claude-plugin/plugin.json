@@ -1,7 +1,7 @@
 {
   "name": "elitez-engineering",
-  "version": "0.1.0",
-  "description": "Elitez Engineering standards for Claude Code: opinionated SaaS tech stack (Remix + TypeScript, React/Tailwind/shadcn, Drizzle, PostgreSQL on Railway), clean-code and KISS rules, testability and unit-test conventions, reusable-component patterns, and do/don't guardrails. Ships skills, slash commands, and a reviewer subagent so every project starts from the same foundation.",
+  "version": "0.2.0",
+  "description": "Elitez Engineering standards for Claude Code: opinionated SaaS tech stack (Remix + TypeScript, React/Tailwind/shadcn, Drizzle, PostgreSQL on Railway), clean-code and KISS rules, testability and unit-test conventions, reusable-component patterns, and do/don't guardrails. Ships skills, slash commands, a reviewer subagent, and the bundled Railway MCP server so every project starts from the same foundation.",
   "author": {
     "name": "Elitez Engineering"
   },

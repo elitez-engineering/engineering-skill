@@ -35,7 +35,10 @@ exception that must be argued for.
 - **Docker** is optional — Railway can build from source; add a Dockerfile only when the build needs
   it, and keep it minimal (multi-stage, node slim base).
 - **Railway MCP** (https://docs.railway.com/ai/mcp-server) — when authorized, use the MCP server to
-  inspect/manage Railway services from the agent instead of hand-copying dashboard values.
+  inspect/manage Railway services from the agent instead of hand-copying dashboard values. This
+  plugin **bundles** the Railway MCP (see `.mcp.json` at the plugin root: `railway mcp` via the
+  Railway CLI), so it auto-loads when the plugin is enabled. Requires the Railway CLI installed and
+  `railway login`. Treat infra actions as authorized-use only.
 - Secrets come from Railway environment variables. Never commit `.env`; commit `.env.example` with
   keys and empty values only.
 
