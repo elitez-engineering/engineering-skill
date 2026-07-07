@@ -1,0 +1,66 @@
+name: CI
+
+# Enforces the github-workflow skill's non-negotiables at merge time:
+#  1. Every PR has a real (non-empty) description.
+#  2. No commit in the PR carries a Co-Authored-By: trailer (board commit-hygiene directive).
+#  3. Every skills/*/SKILL.md has name: and description: front-matter.
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: workflow-gates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out PR head with full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: PR description must not be empty
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if [ -z "$(printf '%s' "$PR_BODY" | tr -d '[:space:]')" ]; then
+            echo "::error::PR description is empty. Fill in the PR template (Summary, Changes, Test plan, Linked issue)."
+            exit 1
+          fi
+          echo "OK: PR description is present."
+
+      - name: No Co-Authored-By trailers in PR commits
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git fetch --no-tags --depth=200 origin "$BASE_REF"
+          range="origin/${BASE_REF}..HEAD"
+          offenders="$(git log --format='%H %s%n%b' "$range" | grep -i 'co-authored-by:' || true)"
+          if [ -n "$offenders" ]; then
+            echo "::error::A commit in this PR contains a Co-Authored-By trailer. Remove it (board commit-hygiene directive)."
+            echo "$offenders"
+            exit 1
+          fi
+          echo "OK: no Co-Authored-By trailers in PR commits."
+
+      - name: Every SKILL.md has name and description front-matter
+        run: |
+          fail=0
+          while IFS= read -r f; do
+            fm="$(awk 'NR==1&&/^---[[:space:]]*$/{f=1;next} f&&/^---[[:space:]]*$/{exit} f{print}' "$f")"
+            if ! printf '%s\n' "$fm" | grep -Eq '^name:[[:space:]]*\S'; then
+              echo "::error file=$f::SKILL.md is missing a 'name:' front-matter field."
+              fail=1
+            fi
+            if ! printf '%s\n' "$fm" | grep -Eq '^description:[[:space:]]*\S'; then
+              echo "::error file=$f::SKILL.md is missing a 'description:' front-matter field."
+              fail=1
+            fi
+          done < <(find skills -type f -name 'SKILL.md' 2>/dev/null)
+          if [ "$fail" -ne 0 ]; then
+            exit 1
+          fi
+          echo "OK: all SKILL.md files have name and description front-matter."
