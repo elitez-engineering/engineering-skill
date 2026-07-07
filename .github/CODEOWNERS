@@ -1,0 +1,18 @@
+# CODEOWNERS — routes review to the right owners for this repo.
+# Order matters: the last matching pattern for a path wins.
+# See https://docs.github.com/articles/about-code-owners
+
+# Default owner for everything in the repo.
+*                       @elitezai-cloud
+
+# Security-sensitive surfaces require Security Engineer sign-off.
+# (auth, crypto, secrets, permissions, PII, agent tool surface, CI config)
+**/auth/**              @elitez-engineering/security-engineers
+**/crypto/**            @elitez-engineering/security-engineers
+**/secrets/**           @elitez-engineering/security-engineers
+**/permissions/**       @elitez-engineering/security-engineers
+**/pii/**               @elitez-engineering/security-engineers
+**/tool/**              @elitez-engineering/security-engineers
+**/tools/**             @elitez-engineering/security-engineers
+/agents/**              @elitez-engineering/security-engineers
+/.github/**             @elitez-engineering/security-engineers
