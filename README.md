@@ -27,6 +27,7 @@ reuse standards instead of re-deciding them.
   - [Troubleshooting](#troubleshooting)
 - [What's inside](#whats-inside)
 - [The `elitez-standards` skill](#the-elitez-standards-skill)
+- [The `github-workflow` skill](#the-github-workflow-skill)
 - [Commands](#commands)
 - [The `elitez-reviewer` agent](#the-elitez-reviewer-agent)
 - [Railway MCP server (bundled)](#railway-mcp-server-bundled)
@@ -148,14 +149,16 @@ elitez-engineering/
 │  └─ marketplace.json      # marketplace manifest — repo installs as its own marketplace
 ├─ .mcp.json                # bundled MCP servers (Railway) — auto-loaded when the plugin is enabled
 ├─ skills/
-│  └─ elitez-standards/
-│     ├─ SKILL.md           # the source-of-truth skill (auto-loads on Elitez code work)
-│     └─ references/
-│        ├─ tech-stack.md            # approved stack, versions, project layout, setup
-│        ├─ clean-code.md            # KISS/DRY/YAGNI, naming, functions, TS strictness
-│        ├─ testing.md               # test pyramid, Vitest, testability, CI gates
-│        ├─ reusable-components.md   # React/shadcn + shared-package patterns
-│        └─ do-and-dont.md           # fast pre-PR do/don't checklist
+│  ├─ elitez-standards/
+│  │  ├─ SKILL.md           # the source-of-truth skill (auto-loads on Elitez code work)
+│  │  └─ references/
+│  │     ├─ tech-stack.md            # approved stack, versions, project layout, setup
+│  │     ├─ clean-code.md            # KISS/DRY/YAGNI, naming, functions, TS strictness
+│  │     ├─ testing.md               # test pyramid, Vitest, testability, CI gates
+│  │     ├─ reusable-components.md   # React/shadcn + shared-package patterns
+│  │     └─ do-and-dont.md           # fast pre-PR do/don't checklist
+│  └─ github-workflow/
+│     └─ SKILL.md           # mandatory GitHub workflow for every coding agent (PR, branch, commit rules)
 ├─ commands/
 │  ├─ elitez-scaffold.md    # /elitez-scaffold  — new project on the approved stack
 │  ├─ elitez-review.md      # /elitez-review    — standards code review with a verdict
@@ -201,6 +204,20 @@ the codebase more consistent than you found it.*
 | `references/testing.md` | The test pyramid, unit vs integration vs E2E, Vitest conventions, arranging code for testability, CI gates. |
 | `references/reusable-components.md` | Building shareable React/shadcn components and shared TS packages: props contracts, accessibility, composition over configuration. |
 | `references/do-and-dont.md` | A fast checklist of concrete do's and don'ts to scan before opening or approving a PR. |
+
+---
+
+## The `github-workflow` skill
+
+The mandatory GitHub workflow for **every coding agent** — ProductEngineer, DevOps, QA,
+SecurityEngineer, and any future coder. It **auto-loads** whenever you touch a git repo (starting a
+change, branching, committing, or opening a PR), so the same rules apply on every project.
+
+It encodes the three non-negotiables — **always open a PR** (never push to `main`), **always write a
+proper PR description**, and **always branch from the latest `main`** — plus branch naming, commit
+conventions (author identity, no `Co-Authored-By` trailer per the board `commit-hygiene` directive),
+a PR-description template, review/merge expectations, and a pre-PR self-check. See
+`skills/github-workflow/SKILL.md`.
 
 ---
 
