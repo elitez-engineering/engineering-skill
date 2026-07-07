@@ -513,7 +513,8 @@ The standard is meant to **compound**. When a project discovers a better pattern
 1. Update the relevant file under `skills/elitez-standards/references/` — keep it concrete and
    citable (a rule you can't point at in review isn't a standard yet).
 2. Bump the version in `.claude-plugin/plugin.json` (and `marketplace.json` metadata).
-3. Commit and push to `main`.
+3. Follow the `github-workflow` skill: branch from the latest `main`, commit with `raflylesmana3003`
+   as the author (no `Co-Authored-By` trailer), and open a PR using the PR-description template.
 4. Downstream projects update with:
    ```
    /plugin marketplace update elitez-engineering
