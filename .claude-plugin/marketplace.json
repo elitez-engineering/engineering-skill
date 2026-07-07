@@ -1,0 +1,17 @@
+{
+  "name": "elitez-engineering",
+  "owner": {
+    "name": "Elitez Engineering"
+  },
+  "metadata": {
+    "description": "Elitez Engineering shared standards plugin for Claude Code.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "elitez-engineering",
+      "source": "./",
+      "description": "Standardized tech stack, clean-code/KISS rules, testing conventions, reusable-component patterns, and do/don't guardrails for Elitez SaaS projects."
+    }
+  ]
+}
