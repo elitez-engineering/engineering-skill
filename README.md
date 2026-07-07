@@ -39,25 +39,38 @@ non-negotiable**, **testable by construction**, **small blast radius**.
 
 ## Install
 
-### From a git repo (recommended for sharing)
+### From GitHub (recommended)
 
-In any Claude Code session:
+In any Claude Code session, add this repo as a marketplace and install the plugin:
 
 ```
-/plugin marketplace add <git-host>/<org>/elitez-engineering
+/plugin marketplace add elitez-engineering/engineering-skill
 /plugin install elitez-engineering@elitez-engineering
 ```
 
-(The repo root contains `.claude-plugin/marketplace.json`, so it works as its own marketplace.)
+The repo root contains `.claude-plugin/marketplace.json`, so the repository works as its own
+marketplace — no separate marketplace repo is needed.
 
 ### From a local checkout
 
+If you've cloned the repo (or are developing the plugin), point the marketplace at the folder:
+
 ```
-/plugin marketplace add /absolute/path/to/elitez-engineering
+/plugin marketplace add /absolute/path/to/engineering-skill
 /plugin install elitez-engineering@elitez-engineering
 ```
 
-Verify with `/plugin` (should list `elitez-engineering` as enabled), then try `/elitez-review`.
+### Verify
+
+Run `/plugin` — `elitez-engineering` should be listed and enabled. Then try `/elitez-review` or
+`/elitez-scaffold` to confirm the commands are available.
+
+### Update to the latest version
+
+```
+/plugin marketplace update elitez-engineering
+/plugin install elitez-engineering@elitez-engineering
+```
 
 ## Usage
 
