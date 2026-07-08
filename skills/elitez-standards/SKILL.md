@@ -1,6 +1,6 @@
 ---
 name: elitez-standards
-description: Elitez Engineering's shared standards for building SaaS web apps. Use whenever you write, review, scaffold, or refactor code in an Elitez project — it defines the approved tech stack (Remix + TypeScript, React/Tailwind/shadcn, Drizzle, PostgreSQL on Railway, Google OAuth, PostHog, Resend), plus clean-code/KISS rules, testability and unit-test conventions, reusable-component patterns, and explicit do/don't guardrails. Read the matching reference file before making a decision the standard covers.
+description: Elitez Engineering's shared standards for building SaaS web apps. Use whenever you write, review, scaffold, or refactor code in an Elitez project — it defines the approved tech stack (Remix + TypeScript, React/Tailwind/shadcn, Drizzle, PostgreSQL on Railway, Better Auth for login/register, Sentry for monitoring, PostHog, Resend), plus clean-code/KISS rules, testability and unit-test conventions, reusable-component patterns, and explicit do/don't guardrails. Read the matching reference file before making a decision the standard covers.
 ---
 
 # Elitez Engineering Standards
@@ -32,8 +32,9 @@ than you found it, not less.
 | ORM / migrations | Drizzle ORM + drizzle-kit                           | Type-safe SQL, explicit versioned migrations |
 | Database         | PostgreSQL (Railway)                                | Boring, proven, relational integrity |
 | Hosting          | Railway (server + Postgres + bucket)                | One platform, simple deploys, optional Docker |
-| Auth             | Google OAuth (authorization-code flow, in code)     | No heavy auth vendor lock-in; owned in-repo |
-| Analytics        | PostHog                                             | Product analytics + feature flags |
+| Auth             | Better Auth (login + register; Google as a provider) | Self-hosted, open-source, in-repo auth framework — first-class sign-in AND sign-up without a hosted auth vendor |
+| Monitoring       | Sentry                                              | Error tracking + performance/observability across BE + FE |
+| Analytics        | PostHog                                             | Product analytics + feature flags (analytics only) |
 | Email/notify     | Resend                                              | Simple transactional email API |
 | Infra assistant  | Railway MCP (https://docs.railway.com/ai/mcp-server)| Manage Railway from the agent when authorized |
 
@@ -57,7 +58,7 @@ Full rationale, versions, and configuration guidance: **references/tech-stack.md
 ## Reference files (read the one that matches your task)
 
 - **references/tech-stack.md** — approved stack, versions, project layout, Railway + Drizzle +
-  Google OAuth + PostHog + Resend setup.
+  Better Auth + Sentry + PostHog + Resend setup.
 - **references/clean-code.md** — KISS/DRY/YAGNI in practice, naming, function/module size, error
   handling at boundaries, comments policy, TypeScript strictness rules.
 - **references/testing.md** — the test pyramid, what to unit-test vs integration-test, Vitest

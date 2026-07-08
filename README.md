@@ -199,7 +199,7 @@ the codebase more consistent than you found it.*
 
 | Reference file | Covers |
 | -------------- | ------ |
-| `references/tech-stack.md` | Approved stack, versions, project layout, and setup for Railway + Drizzle + Google OAuth + PostHog + Resend. |
+| `references/tech-stack.md` | Approved stack, versions, project layout, and setup for Railway + Drizzle + Better Auth + Sentry + PostHog + Resend. |
 | `references/clean-code.md` | KISS / DRY / YAGNI in practice, naming, function & module size, error handling at boundaries, comments policy, strict-TypeScript rules. |
 | `references/testing.md` | The test pyramid, unit vs integration vs E2E, Vitest conventions, arranging code for testability, CI gates. |
 | `references/reusable-components.md` | Building shareable React/shadcn components and shared TS packages: props contracts, accessibility, composition over configuration. |
@@ -236,9 +236,11 @@ starting point (KISS, no speculative features). It sets up:
 - Drizzle + PostgreSQL: `drizzle.config.ts`, `app/db/schema.ts` (example `users` table),
   `app/db/index.ts`, and an initial committed migration
 - zod-validated env (`app/lib/env.server.ts`) that fails fast, plus `.env.example`
-- A stubbed Google OAuth authorization-code flow in `app/services/auth/google.ts` (flagged for
-  Security review)
-- PostHog wrapper (`app/lib/analytics.ts`) and server-side Resend helper (`app/services/email/`)
+- Better Auth configured in `app/services/auth/` (Drizzle adapter) for login + register — email/
+  password and Google as a provider (flagged for Security review)
+- PostHog wrapper (`app/lib/analytics.ts`, product analytics only), Sentry wrapper
+  (`app/lib/monitoring.ts`, error tracking + tracing), and server-side Resend helper
+  (`app/services/email/`)
 - ESLint + Prettier + Vitest with an example service test and `test` / `lint` / `typecheck` scripts
 - A README documenting the stack, env vars, and how to run / test / migrate
 
@@ -355,8 +357,9 @@ exception that must be argued for.
 | ORM / migrations | Drizzle ORM + drizzle-kit | Type-safe SQL, explicit versioned migrations |
 | Database         | PostgreSQL (Railway) | Boring, proven, relational integrity |
 | Hosting          | Railway (server + Postgres + bucket); Docker optional | One platform, simple deploys |
-| Auth             | Google OAuth 2.0 authorization-code flow (in code) | No heavy auth-vendor lock-in; owned in-repo |
-| Analytics        | PostHog | Product analytics + feature flags |
+| Auth             | Better Auth (login + register; Google as a provider) | Self-hosted, open-source, in-repo auth framework — first-class sign-in AND sign-up without a hosted auth vendor |
+| Monitoring       | Sentry | Error tracking + performance/observability across BE + FE |
+| Analytics        | PostHog | Product analytics + feature flags (analytics only) |
 | Email            | Resend (server-side transactional) | Simple transactional email API |
 | Infra assistant  | [Railway MCP](https://docs.railway.com/ai/mcp-server) | Manage Railway from the agent when authorized |
 
@@ -366,7 +369,7 @@ exception that must be argued for.
 app/
   routes/            # Remix routes (thin loaders/actions)
   services/          # framework-agnostic business logic (unit-tested)
-    auth/            # Google OAuth + sessions
+    auth/            # Better Auth config (Drizzle adapter, providers, sessions)
     email/           # Resend
   db/
     schema.ts        # Drizzle schema (source of truth for DB types)
@@ -375,7 +378,8 @@ app/
     ui/              # shadcn components (owned, editable)
     <feature>/       # feature components
   lib/
-    analytics.ts     # PostHog wrapper
+    analytics.ts     # PostHog wrapper (product analytics only)
+    monitoring.ts    # Sentry wrapper (error tracking + tracing)
     env.server.ts    # validated env access (zod)
 drizzle/             # generated migrations (committed)
 tests/               # or *.test.ts colocated with source
@@ -456,7 +460,7 @@ migrations, Security & secrets, Testing, Reuse, and Hygiene. A few of the sharpe
 - ❌ No `any` in committed code; no `!` to silence the compiler.
 - ❌ Don't call the DB or services directly from React components.
 - ❌ Never swallow errors (`catch {}`); no silent failures.
-- ❌ Never commit secrets; never send PII in PostHog events; email is server-side only.
+- ❌ Never commit secrets; never send PII to PostHog or Sentry; email is server-side only.
 - ❌ Don't mock the database for logic that depends on real query behavior.
 - ❌ Don't bypass CI gates, signing, or review to ship faster.
 

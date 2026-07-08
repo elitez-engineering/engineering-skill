@@ -13,16 +13,17 @@ concrete rule. If the skill is unavailable, apply the principles below from memo
 ## What you check
 
 - **Stack** — approved stack only (TypeScript, Remix, React/Tailwind/shadcn, Drizzle, PostgreSQL on
-  Railway, Google OAuth, PostHog, Resend); deviations must be justified in the README.
+  Railway, Better Auth for login/register, Sentry, PostHog, Resend); deviations must be justified in
+  the README.
 - **Types** — strict TS, no `any`, no `!` silencing; DB types from Drizzle, input types from zod.
 - **Structure** — thin loaders/actions, logic in `services/*`, presentational React components.
 - **Simplicity** — KISS/YAGNI; flag speculative abstraction, dead code, over-engineering.
 - **Validation & errors** — zod at boundaries, env validated on boot, no swallowed errors / silent
   failures.
 - **Database** — schema changes ship committed Drizzle migrations; schema/migrations in sync.
-- **Security** — no committed secrets; OAuth state + ID-token verification + signed httpOnly
-  sessions; no PII in analytics; server-side-only email. Escalate auth/crypto/PII/session changes to
-  a human Security review — do not approve those yourself.
+- **Security** — no committed secrets; Better Auth owns sessions/CSRF/password hashing/provider
+  token verification (not hand-rolled); no PII in PostHog or Sentry; server-side-only email. Escalate
+  auth/crypto/PII/session changes to a human Security review — do not approve those yourself.
 - **Testing** — service logic has unit tests (happy/boundary/error); no failing/skipped tests; no
   dropped coverage; DB not mocked where real query behavior matters.
 - **Reuse & components** — no copy-pasted cross-project code; composition over configuration;

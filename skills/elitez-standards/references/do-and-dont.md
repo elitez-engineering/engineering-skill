@@ -5,7 +5,7 @@ Scan this before opening a PR or approving one. Each line is a concrete, citable
 ## Stack
 
 - ✅ Use the approved stack: TypeScript, Remix, React + Tailwind + shadcn, Drizzle, PostgreSQL on
-  Railway, Google OAuth, PostHog, Resend.
+  Railway, Better Auth (login + register), Sentry, PostHog, Resend.
 - ✅ Justify any deviation in the project README (what, why, tradeoff).
 - ❌ Don't add a new dependency when the stack already covers the need.
 - ❌ Don't introduce novel/unproven tech without a written reason.
@@ -45,9 +45,14 @@ Scan this before opening a PR or approving one. Each line is a concrete, citable
 ## Security & secrets
 
 - ✅ Secrets in Railway env vars; commit only `.env.example` with empty values.
-- ✅ Google OAuth: validate `state`, verify the ID token, use signed httpOnly session cookies.
+- ✅ Better Auth owns login + register: configure sessions, CSRF, password hashing, and provider
+  (e.g. Google) token verification — don't re-implement these primitives by hand.
 - ✅ Route auth/crypto/PII/session changes through Security review before merge.
-- ❌ Never commit secrets, tokens, or credentials. Never send PII in PostHog events.
+- ✅ Set `trustedOrigins` explicitly, `secure` cookies in production, and enable rate limiting on
+  sign-in/sign-up/password-reset routes.
+- ❌ Never commit secrets, tokens, or credentials (incl. `BETTER_AUTH_SECRET`, `SENTRY_DSN`). Never
+  send PII to PostHog or Sentry.
+- ❌ Don't use PostHog for error tracking — that's Sentry's job; PostHog is product analytics only.
 - ❌ Don't send email from the client — Resend sends are server-side only.
 
 ## Testing

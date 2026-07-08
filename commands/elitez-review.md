@@ -19,8 +19,9 @@ Check the change against, at minimum:
 - **Validation & errors** — input validated at boundaries with zod; no swallowed errors / silent
   failures.
 - **Database** — schema changes ship a committed Drizzle migration; schema and migrations in sync.
-- **Security** — no committed secrets; OAuth state/ID-token/session handled correctly; no PII in
-  PostHog; server-side-only email. Flag anything touching auth/crypto/PII/session for Security review.
+- **Security** — no committed secrets; Better Auth owns sessions/CSRF/hashing/provider token
+  verification (not hand-rolled); no PII in PostHog or Sentry; server-side-only email. Flag anything
+  touching auth/crypto/PII/session for Security review.
 - **Testing** — new service logic has unit tests (happy/boundary/error); no failing/skipped tests;
   no dropped coverage; DB not mocked where real query behavior matters.
 - **Reuse & components** — shared code not copy-pasted; composition over configuration; accessible,
