@@ -48,6 +48,8 @@ Scan this before opening a PR or approving one. Each line is a concrete, citable
 - ✅ Better Auth owns login + register: configure sessions, CSRF, password hashing, and provider
   (e.g. Google) token verification — don't re-implement these primitives by hand.
 - ✅ Route auth/crypto/PII/session changes through Security review before merge.
+- ✅ Set `trustedOrigins` explicitly, `secure` cookies in production, and enable rate limiting on
+  sign-in/sign-up/password-reset routes.
 - ❌ Never commit secrets, tokens, or credentials (incl. `BETTER_AUTH_SECRET`, `SENTRY_DSN`). Never
   send PII to PostHog or Sentry.
 - ❌ Don't use PostHog for error tracking — that's Sentry's job; PostHog is product analytics only.

@@ -56,6 +56,10 @@ exception that must be argued for.
   `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` in env and register them in the Better Auth config.
 - Let Better Auth own sessions, CSRF protection, password hashing, and token verification (signed,
   httpOnly cookies). Do not re-implement these primitives yourself — configure them.
+- Set `trustedOrigins` explicitly to our own app URL(s); set cookies `secure` in production
+  (`sameSite: lax` or stricter). Never widen `trustedOrigins` or CORS for auth routes to `*`.
+- Enable Better Auth's built-in rate limiting on `/sign-in`, `/sign-up`, and password-reset routes
+  to blunt credential stuffing and brute-force/enumeration attacks; do not disable it.
 - Set `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL` from env; never commit them.
 - **Auth, crypto, PII, and session handling get a Security review before merge** — loop Security in
   at design time, not after.
