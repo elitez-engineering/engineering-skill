@@ -8,7 +8,8 @@ CI gates, not goodwill.
 - **Many unit tests** — pure business logic in `app/services/*` and `app/lib/*`. Fast, no I/O.
 - **Some integration tests** — loaders/actions and DB access against a real (test) Postgres. Catches
   wiring and migration issues that mocks hide.
-- **Few end-to-end tests** — critical user flows (login via Google OAuth, primary conversion path).
+- **Few end-to-end tests** — critical user flows (register + login via Better Auth, primary
+  conversion path).
 - Don't invert the pyramid: if you find yourself writing an E2E test to cover logic, that logic
   probably belongs in a unit-tested service instead.
 

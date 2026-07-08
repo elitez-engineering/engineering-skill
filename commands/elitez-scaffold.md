@@ -1,5 +1,5 @@
 ---
-description: Scaffold a new Elitez SaaS project on the approved stack (Remix + TypeScript, React/Tailwind/shadcn, Drizzle + PostgreSQL, Google OAuth, PostHog, Resend, Railway).
+description: Scaffold a new Elitez SaaS project on the approved stack (Remix + TypeScript, React/Tailwind/shadcn, Drizzle + PostgreSQL, Better Auth for login/register, Sentry, PostHog, Resend, Railway).
 argument-hint: "[project-name]"
 ---
 
@@ -19,11 +19,14 @@ Produce a minimal, working, standards-compliant starting point — KISS, no spec
    `app/db/index.ts` client, and an initial generated migration under `drizzle/`.
 5. **Env validation**: `app/lib/env.server.ts` using zod; fail fast on missing vars. Add
    `.env.example` (keys only, no values) and ensure `.env` is gitignored.
-6. **Auth**: stub `app/services/auth/google.ts` for the OAuth 2.0 authorization-code flow (state
-   validation, ID-token verification, signed httpOnly session cookie). Mark auth/crypto/session for
-   Security review before merge.
-7. **Integrations**: `app/lib/analytics.ts` (PostHog wrapper) and `app/services/email/` (Resend
-   helper) — server-side only.
+6. **Auth**: configure **Better Auth** in `app/services/auth/` with the Drizzle adapter (against our
+   Postgres) for **login AND register** — enable email/password and Google as a social provider.
+   Let Better Auth own sessions, CSRF, password hashing, and token verification; add its
+   user/session/account tables via a Drizzle migration. Mark auth/crypto/session for Security review
+   before merge.
+7. **Integrations**: `app/lib/analytics.ts` (PostHog wrapper — product analytics only),
+   `app/lib/monitoring.ts` (Sentry wrapper — error tracking + tracing, server + client), and
+   `app/services/email/` (Resend helper) — server-side sends only.
 8. **Tooling**: ESLint (typescript-eslint) + Prettier + Vitest configured. Add one example unit test
    for a `services/` function and wire `test`, `lint`, `typecheck` scripts.
 9. **Railway**: note in the README how to deploy (server + Postgres + bucket), that Docker is
