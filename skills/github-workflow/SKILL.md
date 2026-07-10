@@ -92,10 +92,6 @@ Optionally suffix the ticket id for traceability: `fix/cart-total-off-by-one-CHR
   ~72 cols. Reference the ticket id.
 - **Author name:** set the commit author to the company-standard identity before committing:
 
-  ```sh
-  git config user.name "raflylesmana3003"
-  ```
-
   A repo checkout may carry a local override, so set it explicitly per repo. Do **not** change the
   author *email*.
 
@@ -170,7 +166,7 @@ Run through this before you open (or ask for review on) a PR. If any answer is "
 - [ ] I am **not** pushing to `main` — the change is on a properly named branch.
 - [ ] The diff is **scoped** to this task — no unrelated refactors or stray files.
 - [ ] Commit subjects are imperative and clear; body explains non-obvious *why*.
-- [ ] Commit author is `raflylesmana3003` and there is **no** `Co-Authored-By:` trailer
+- [ ] **no** `Co-Authored-By:` trailer
       (`git log -1 --format='%b' | grep -i 'co-authored-by'` prints nothing).
 - [ ] No secrets, credentials, tokens, or `.env` files are staged.
 - [ ] Tests/build relevant to the change pass locally (or I've said why not).
