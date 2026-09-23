@@ -11,7 +11,7 @@ reuse standards instead of re-deciding them.
 
 - **Repository:** https://github.com/elitez-engineering/engineering-skill
 - **Plugin name / marketplace name:** `elitez-engineering`
-- **Version:** `0.2.0`
+- **Version:** `0.3.0`
 
 ---
 
@@ -28,6 +28,7 @@ reuse standards instead of re-deciding them.
 - [What's inside](#whats-inside)
 - [The `elitez-standards` skill](#the-elitez-standards-skill)
 - [The `github-workflow` skill](#the-github-workflow-skill)
+- [The `linear-hour-estimate` skill](#the-linear-hour-estimate-skill)
 - [Commands](#commands)
 - [The `elitez-reviewer` agent](#the-elitez-reviewer-agent)
 - [Railway MCP server (bundled)](#railway-mcp-server-bundled)
@@ -157,12 +158,15 @@ elitez-engineering/
 │  │     ├─ testing.md               # test pyramid, Vitest, testability, CI gates
 │  │     ├─ reusable-components.md   # React/shadcn + shared-package patterns
 │  │     └─ do-and-dont.md           # fast pre-PR do/don't checklist
-│  └─ github-workflow/
-│     └─ SKILL.md           # mandatory GitHub workflow for every coding agent (PR, branch, commit rules)
+│  ├─ github-workflow/
+│  │  └─ SKILL.md           # mandatory GitHub workflow for every coding agent (PR, branch, commit rules)
+│  └─ linear-hour-estimate/
+│     └─ SKILL.md           # Elitez Linear Man-hours: 1h / 2h / 3h / 4h / 8h from the spec
 ├─ commands/
 │  ├─ elitez-scaffold.md    # /elitez-scaffold  — new project on the approved stack
 │  ├─ elitez-review.md      # /elitez-review    — standards code review with a verdict
-│  └─ elitez-component.md   # /elitez-component — reusable React/shadcn component + test
+│  ├─ elitez-component.md   # /elitez-component — reusable React/shadcn component + test
+│  └─ elitez-estimate.md    # /elitez-estimate  — size Linear tickets from the spec
 ├─ agents/
 │  └─ elitez-reviewer.md    # subagent that reviews code against the standards
 └─ README.md
@@ -221,10 +225,30 @@ a PR-description template, review/merge expectations, and a pre-PR self-check. S
 
 ---
 
+## The `linear-hour-estimate` skill
+
+Company Linear sizing for Elitez-AI. Size child tickets from the **written acceptance criteria**,
+then set **Man-hours** (`1h` `2h` `3h` `4h` `8h`) and matching **estimate**. Epics get Type only.
+Skip 5/6/7; split anything that would be 16h+. The Man-hours label is the source of truth (Linear
+may store 8h as 7 points).
+
+Baselines: ELI-571 = 1h, ELI-718 = 2h, ELI-752 = 3h, ELI-580 / ELI-717 = 4h. An hour includes
+implement, tests, and the AC check. Do not write calendar or agent duration onto Linear.
+
+See `skills/linear-hour-estimate/SKILL.md`. Invoke with `/elitez-estimate` or `/linear-hour-estimate`.
+
+---
+
 ## Commands
 
-Three slash commands cover the highest-frequency tasks. Each one reads the `elitez-standards` skill
-first so its output cites concrete rules.
+Four slash commands cover the highest-frequency tasks. Scaffold, review, and component each read the
+`elitez-standards` skill first so their output cites concrete rules. Estimate reads
+`linear-hour-estimate`.
+
+### `/elitez-estimate [issue ids]`
+
+Sizes Elitez Linear tickets from the spec using Man-hours 1h / 2h / 3h / 4h / 8h. Reads
+`linear-hour-estimate` first.
 
 ### `/elitez-scaffold [project-name]`
 
